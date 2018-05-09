@@ -4,3 +4,4 @@ target
 node_modules
 src/main/resources/static/built
 built
+package-lock.json

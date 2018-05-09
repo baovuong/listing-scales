@@ -1,5 +1,6 @@
 const React = require('react');
 const ReactDOM = require('react-dom');
+const VexFlow = require('vexflow');
 
 class App extends React.Component {
 
@@ -11,6 +12,12 @@ class App extends React.Component {
         return (
             <h1>wowowowow!</h1>
         )
+    }
+}
+
+class MusicalScale extends React.Component {
+    constructor(props) {
+        super(props);
     }
 }
 
