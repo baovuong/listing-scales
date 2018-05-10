@@ -5,3 +5,7 @@ node_modules
 src/main/resources/static/built
 built
 package-lock.json
+.classpath
+.project
+.settings
+.vscode
