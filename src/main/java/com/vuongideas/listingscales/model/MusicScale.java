@@ -20,15 +20,17 @@ import com.vuongideas.listingscales.util.StringListConverter;
 public class MusicScale {
     
     @Id
-    @GeneratedValue(strategy=GenerationType.AUTO)
+    @GeneratedValue(strategy=GenerationType.IDENTITY)
     private Long id;
 
     @Column
     @Convert(converter = StringListConverter.class)
     private List<String> intervals;
 
+    @Column
     private int tones;
     
+    @Column
     private int root;
     
     @OneToMany(cascade=CascadeType.ALL, fetch=FetchType.LAZY)
