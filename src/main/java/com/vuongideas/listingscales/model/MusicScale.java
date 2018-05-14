@@ -3,6 +3,8 @@ package com.vuongideas.listingscales.model;
 import java.util.List;
 
 import javax.persistence.CascadeType;
+import javax.persistence.Column;
+import javax.persistence.Convert;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
@@ -10,6 +12,8 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
+
+import com.vuongideas.listingscales.util.StringListConverter;
 
 @Entity
 @Table(name="MusicScale")
@@ -19,7 +23,9 @@ public class MusicScale {
     @GeneratedValue(strategy=GenerationType.AUTO)
     private Long id;
 
-    private String intervals;
+    @Column
+    @Convert(converter = StringListConverter.class)
+    private List<String> intervals;
 
     private int tones;
     
@@ -41,7 +47,7 @@ public class MusicScale {
         return tones;
     }
 
-    public String getIntervals() {
+    public List<String> getIntervals() {
         return intervals;
     }
 

@@ -8,6 +8,7 @@ import com.vuongideas.listingscales.model.MusicScale;
 
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
+import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
 
 public class ScaleExtractor {
@@ -19,10 +20,34 @@ public class ScaleExtractor {
                 .get();
             
             Elements rows = doc.getElementsByTag("tr");
+            int state = 0;
+
+            for (Element row : rows) {
+                switch (state) {
+                    case 0:
+                    default:
+                }
+            }
 
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
         return Collections.emptyList();
+    }
+
+    private static boolean isToneRow(Element row) {
+        return false;
+    }
+
+    private static boolean isScaleRow(Element row) {
+        return false;
+    }
+
+    private static int getTonesFromRow(Element row) {
+        return 0;
+    }
+
+    public static MusicScale getScaleFromRow(Element row, int tones) {
+        return null;
     }
 }
