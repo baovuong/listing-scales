@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
+import java.util.regex.Pattern;
 
 import com.vuongideas.listingscales.model.MusicScale;
 
@@ -51,7 +52,9 @@ public class ScaleExtractor {
     }
 
     private static boolean isToneRow(Element row) {
-        return false;
+        return row.getElementsByTag("h4").stream()
+            .filter(e -> Pattern.compile("[0-9]+ [tT]ones").matcher(e.text()).find())
+            .count() > 0;
     }
 
     private static boolean isScaleRow(Element row) {
