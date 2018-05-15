@@ -58,7 +58,10 @@ public class ScaleExtractor {
     }
 
     private static boolean isScaleRow(Element row) {
-        return false;
+        return row.getElementsByTag("td").size() == 2 
+            && row.getElementsByTag("td").stream()
+                .filter(e -> Pattern.matches("\\[?[1-9]\\]? ?([1-9] ?)*", e.text()))
+                .count() == 1;
     }
 
     private static int getTonesFromRow(Element row) {
