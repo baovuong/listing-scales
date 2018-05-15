@@ -1,6 +1,7 @@
 package com.vuongideas.listingscales.util;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
 
@@ -21,13 +22,27 @@ public class ScaleExtractor {
             
             Elements rows = doc.getElementsByTag("tr");
             int state = 0;
-
+            Collection<MusicScale> scales = new ArrayList<>();
             for (Element row : rows) {
+                int tones = 0;
                 switch (state) {
                     case 0:
+                    if (isScaleRow(row)) {
+                        state = 1;
+                    } else {
+                        tones = getTonesFromRow(row);
+                    }
+                    case 1:
+                    if (isToneRow(row)) {
+                        state = 0;
+                    } else {
+                        scales.add(getScaleFromRow(row, tones));
+                    }
                     default:
                 }
             }
+
+            return scales;
 
 		} catch (IOException e) {
 			e.printStackTrace();
