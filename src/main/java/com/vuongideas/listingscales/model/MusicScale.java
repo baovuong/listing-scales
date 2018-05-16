@@ -13,7 +13,7 @@ import javax.persistence.Id;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
-import com.vuongideas.listingscales.util.StringListConverter;
+import com.vuongideas.listingscales.util.IntegerListConverter;
 
 @Entity
 @Table(name="MusicScale")
@@ -24,8 +24,8 @@ public class MusicScale {
     private Long id;
 
     @Column
-    @Convert(converter = StringListConverter.class)
-    private List<String> intervals;
+    @Convert(converter = IntegerListConverter.class)
+    private List<Integer> intervals;
 
     @Column
     private int tones;
@@ -49,11 +49,25 @@ public class MusicScale {
         return tones;
     }
 
-    public List<String> getIntervals() {
+    public List<Integer> getIntervals() {
         return intervals;
     }
 
     public int getRoot() {
         return root;
     }
+
+    public void setNames(List<String> names) {
+        this.names = names;
+    }
+
+    public void setTones(int tones) {
+        this.tones = tones;
+    }
+
+    public void setIntervals(List<Integer> intervals) {
+        this.intervals = intervals;
+    }
+
+
 }
