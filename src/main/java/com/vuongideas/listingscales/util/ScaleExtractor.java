@@ -27,14 +27,10 @@ public class ScaleExtractor {
                 .referrer("http://www.google.com")
                 .get();
             
-            Elements rows = doc.getElementsByTag("tr");
-            Collection<MusicScale> scales = new ArrayList<>();
-            for (Element row : rows) {
-                if (isScaleRow(row)) 
-                    scales.add(getScaleFromRow(row));
-            }
-
-            return scales;
+            return doc.getElementsByTag("tr").stream()
+                .map(r -> isScaleRow(r) ? getScaleFromRow(r) : null)
+                .filter(r -> r != null)
+                .collect(Collectors.toList());
 
 		} catch (IOException e) {
 			e.printStackTrace();
