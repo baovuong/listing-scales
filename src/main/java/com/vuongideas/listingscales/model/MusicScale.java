@@ -61,12 +61,35 @@ public class MusicScale {
         this.names = names;
     }
 
-    public void setTones(int tones) {
-        this.tones = tones;
-    }
-
     public void setIntervals(List<Integer> intervals) {
         this.intervals = intervals;
+        this.tones = intervals.stream().mapToInt(Integer::intValue).sum();
+    }
+
+    public void setRoot(int root) {
+        this.root = root;
+    }
+
+    @Override
+    public String toString() {
+        return "(scale: "
+            + "tones=" + tones + ","
+            + "root=" + root + ","
+            + "intervals=" + intervals.toString() + ","
+            + "names=" + names.toString()
+            + ")";
+    }
+
+    @Override
+    public boolean equals(Object other) {
+        if (other instanceof MusicScale) {
+            MusicScale otherScale = (MusicScale) other;
+            return tones == otherScale.tones
+                && root == otherScale.root
+                && intervals.equals(otherScale.intervals)
+                && names.equals(otherScale.names);
+        }
+        return false;
     }
 
 

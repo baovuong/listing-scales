@@ -5,7 +5,6 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.Collections;
-import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import java.util.stream.Collectors;
@@ -19,7 +18,6 @@ import org.jsoup.select.Elements;
 
 public class ScaleExtractor {
 
-    private static String tonesPattern = "(?<tones>[0-9]+) [tT]one.*:";
     private static String intervalsPattern = "(\\[(?<root>[0-9]+)\\])? ?(?<intervals>([0-9] ?)+)";
 
     public static Collection<MusicScale> extractScales() {
@@ -30,14 +28,10 @@ public class ScaleExtractor {
                 .get();
             
             Elements rows = doc.getElementsByTag("tr");
-            int tones = 12;
             Collection<MusicScale> scales = new ArrayList<>();
             for (Element row : rows) {
-                if (isToneRow(row)) {
-                    tones = getTonesFromRow(row);
-                } else if (isScaleRow(row)) {
-                    scales.add(getScaleFromRow(row, tones));
-                }
+                if (isScaleRow(row)) 
+                    scales.add(getScaleFromRow(row));
             }
 
             return scales;
@@ -48,12 +42,6 @@ public class ScaleExtractor {
         return Collections.emptyList();
     }
 
-    private static boolean isToneRow(Element row) {
-        return row.getElementsByTag("h4").stream()
-            .filter(e -> Pattern.matches(tonesPattern, e.text()))
-            .count() > 0;
-    }
-
     private static boolean isScaleRow(Element row) {
         Elements columns = row.getElementsByTag("td");
         return columns.size() == 2
@@ -62,23 +50,29 @@ public class ScaleExtractor {
                 .count() == 1;
     }
 
-    private static int getTonesFromRow(Element row) {
-        Element column = row.getElementsByTag("td").first();
-        Matcher matcher = Pattern.compile(tonesPattern).matcher(column.text());
-        return Integer.parseInt(matcher.group("tones"));
-    }
-
-    public static MusicScale getScaleFromRow(Element row, int tones) {
+    public static MusicScale getScaleFromRow(Element row) {
         MusicScale scale = new MusicScale();
-        scale.setTones(tones);
 
         Elements columns = row.getElementsByTag("td");
         Matcher intervalMatcher = Pattern.compile(intervalsPattern).matcher(columns.get(0).text());
-        List<Integer> intervals = Arrays.stream(intervalMatcher.group("intervals").split(" "))
+        intervalMatcher.matches();
+        
+        // intervals
+        scale.setIntervals(Arrays.stream(intervalMatcher.group("intervals").split(" "))
             .map(s -> Integer.parseInt(s))
-            .collect(Collectors.toList());
-        scale.setIntervals(intervals);
+            .collect(Collectors.toList()));
 
+        // root 
+        try {
+            scale.setRoot(Integer.parseInt(intervalMatcher.group("root")));
+        } catch (IllegalArgumentException e) {
+            scale.setRoot(0);
+        }
+
+        // names
+        scale.setNames(Arrays.stream(columns.get(1).text().split(","))
+            .map(String::trim)
+            .collect(Collectors.toList()));
 
         return scale;
     }
