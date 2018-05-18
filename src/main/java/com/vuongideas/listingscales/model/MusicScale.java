@@ -33,6 +33,7 @@ public class MusicScale {
     
     @ElementCollection
     @CollectionTable(name="ScaleName", joinColumns=@JoinColumn(name="musicScaleId"))
+    @Column(name="name")
     private List<String> names;
 
 
