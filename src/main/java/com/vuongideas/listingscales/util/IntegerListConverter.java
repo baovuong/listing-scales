@@ -18,7 +18,7 @@ public class IntegerListConverter implements AttributeConverter<List<Integer>, S
 	@Override
 	public List<Integer> convertToEntityAttribute(String dbData) {
 		return Arrays.stream(dbData.split(","))
-			.map(s -> Integer.parseInt(s))
+			.map(s -> Integer.parseInt(s.replaceAll("[^0-9]","")))
 			.collect(Collectors.toList());
 	}
 

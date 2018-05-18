@@ -2,21 +2,19 @@ package com.vuongideas.listingscales.model;
 
 import java.util.List;
 
-import javax.persistence.CascadeType;
+import javax.persistence.CollectionTable;
 import javax.persistence.Column;
 import javax.persistence.Convert;
+import javax.persistence.ElementCollection;
 import javax.persistence.Entity;
-import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.OneToMany;
-import javax.persistence.Table;
+import javax.persistence.JoinColumn;
 
 import com.vuongideas.listingscales.util.IntegerListConverter;
 
 @Entity
-@Table(name="MusicScale")
 public class MusicScale {
     
     @Id
@@ -33,7 +31,8 @@ public class MusicScale {
     @Column
     private int root;
     
-    @OneToMany(cascade=CascadeType.ALL, fetch=FetchType.LAZY)
+    @ElementCollection
+    @CollectionTable(name="ScaleName", joinColumns=@JoinColumn(name="musicScaleId"))
     private List<String> names;
 
 

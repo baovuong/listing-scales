@@ -3,7 +3,8 @@ package com.vuongideas.listingscales.controller;
 import java.util.List;
 
 import com.vuongideas.listingscales.model.MusicScale;
-import com.vuongideas.listingscales.repository.MusicScaleRepository;
+import com.vuongideas.listingscales.service.ListingScalesService;
+import com.vuongideas.listingscales.util.ScaleExtractor;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.CrossOrigin;
@@ -15,11 +16,11 @@ import org.springframework.web.bind.annotation.RestController;
 public class ListingScalesController {
 
     @Autowired
-    MusicScaleRepository musicScaleRepository;
+    ListingScalesService service;
 
     @RequestMapping(value = "/scales", method = RequestMethod.GET)
     @CrossOrigin(origins = "*")
     public List<MusicScale> allScales() {
-        return musicScaleRepository.findAll();
+        return service.getAllScales();
     }
 }
