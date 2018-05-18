@@ -4,7 +4,6 @@ import java.util.List;
 
 import com.vuongideas.listingscales.model.MusicScale;
 import com.vuongideas.listingscales.service.ListingScalesService;
-import com.vuongideas.listingscales.util.ScaleExtractor;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.CrossOrigin;
