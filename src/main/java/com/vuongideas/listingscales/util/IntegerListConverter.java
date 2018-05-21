@@ -12,13 +12,15 @@ public class IntegerListConverter implements AttributeConverter<List<Integer>, S
 
 	@Override
 	public String convertToDatabaseColumn(List<Integer> attribute) {
-		return String.join(",", attribute.toString());
+		return attribute.stream()
+			.map(Object::toString)
+			.collect(Collectors.joining(","));
 	}
 
 	@Override
 	public List<Integer> convertToEntityAttribute(String dbData) {
 		return Arrays.stream(dbData.split(","))
-			.map(s -> Integer.parseInt(s.replaceAll("[^0-9]","")))
+			.map(s -> Integer.parseInt(s))
 			.collect(Collectors.toList());
 	}
 
