@@ -1,6 +1,7 @@
 package com.vuongideas.listingscales.controller;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 import com.vuongideas.listingscales.model.MusicScale;
@@ -21,16 +22,18 @@ public class ListingScalesController {
 
     @RequestMapping(value = "/scales", method = RequestMethod.GET)
     @CrossOrigin(origins = "*")
-    public List<MusicScale> allScales(@RequestParam(name = "q", required = false) String name) {
-        if (name == null)
-            return repository.findAll();
+    public List<MusicScale> allScales(
+        @RequestParam(name = "q", required = false) String name,
+        @RequestParam(name = "tones", required = false) Integer tones) {
 
-
-        // TODO this isn't too efficient. O(n^2) search.
-        return repository.findAll().stream()
-            .filter(s -> s.getNames().stream()
-                .filter(n -> n.toLowerCase().contains(name.toLowerCase()))
-                .count() > 0)
-            .collect(Collectors.toList());
+        List<MusicScale> results = Optional.ofNullable(name)
+            .map(n -> repository.findByName(n))
+            .orElse(repository.findAll());
+        
+        return Optional.ofNullable(tones)
+            .map(t -> results.stream()
+                .filter(s -> new Integer(s.getTones()).equals(t))
+                .collect(Collectors.toList()))
+            .orElse(results);
     }
 }
