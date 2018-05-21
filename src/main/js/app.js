@@ -1,8 +1,9 @@
-const React = require('react');
-const ReactDOM = require('react-dom');
-const VexFlow = require('vexflow');
+import React from 'react';
+import ReactDOM from 'react-dom';
+import VexFlow from 'vexflow';
+import MusicalScale from './musicalScale.js';
 
-class App extends React.Component {
+export class App extends React.Component {
 
     constructor(props) {
         super(props);
@@ -10,16 +11,15 @@ class App extends React.Component {
 
     render() {
         return (
-            <h1>wowowowow!</h1>
+            <div>
+                <h1>All the Scales!</h1>
+                <MusicalScale/>
+            </div>
         )
     }
 }
 
-class MusicalScale extends React.Component {
-    constructor(props) {
-        super(props);
-    }
-}
+
 
 ReactDOM.render(
     <App />,

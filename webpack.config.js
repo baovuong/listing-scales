@@ -1,7 +1,7 @@
 var path = require('path');
 
 module.exports = {
-    entry: './src/main/js/app.js',
+    entry: ['./src/main/js/app.js', './src/main/js/musicalScale.js'],
     devtool: 'sourcemaps',
     cache: true,
     debug: true,
@@ -12,7 +12,7 @@ module.exports = {
     module: {
         loaders: [
             {
-                test: path.join(__dirname, '.'),
+                test: /.js?$/,
                 exclude: /(node_modules)/,
                 loader: 'babel',
                 query: {
@@ -20,6 +20,11 @@ module.exports = {
                     presets: ['es2015', 'react']
                 }
             }
-        ]
+        ],
+        
+    },
+    resolve: {
+        // modules: [path.resolve(__dirname, "./src/main/js"), "node_modules"],
+        extensions: ['', '.js', '.jsx']
     }
 };
