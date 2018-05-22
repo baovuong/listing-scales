@@ -1,8 +1,8 @@
 import React from 'react';
 
 export default class MusicalScale extends React.Component {
-    static noteMappings() {
-        return [
+    static mapNote(value) {
+        const thing = [
             'C',
             'C&#x266f;/D&#x266d;',
             'D',
@@ -15,7 +15,9 @@ export default class MusicalScale extends React.Component {
             'A',
             'A&#x266f;/B&#x266d;',
             'B'
-        ]
+        ];
+
+        return thing[value % 12];
     }
 
     constructor(props) {
@@ -32,7 +34,11 @@ export default class MusicalScale extends React.Component {
 
     render() {
         return (
-            <h2>test</h2>
+            <div>
+                <div>names: {names.join(',')}</div>
+                <div>root: {MusicalScale.mapNote(root + startingNote)}</div>
+                <div>notes: {intervals.map(_ => MusicalScale.mapNote(_ + root)).join(',')}</div>
+            </div>
         )
     }
 }

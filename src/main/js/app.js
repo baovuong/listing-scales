@@ -17,6 +17,10 @@ export class App extends React.Component {
             </div>
         )
     }
+
+    scaleById(id) {
+        
+    }
 }
 
 
