@@ -1,7 +1,7 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import VexFlow from 'vexflow';
-import MusicalScale from './musicalScale.js';
+import MusicScaleList from './musicScaleList';
 
 export class App extends React.Component {
 
@@ -13,13 +13,9 @@ export class App extends React.Component {
         return (
             <div>
                 <h1>All the Scales!</h1>
-                <MusicalScale/>
+                <MusicScaleList />
             </div>
         )
-    }
-
-    scaleById(id) {
-        
     }
 }
 
