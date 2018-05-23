@@ -11,7 +11,7 @@ export default class MusicScaleList extends React.Component {
     }
 
     componentDidMount() {
-        axios.get('http://localhost:8080/scales?tones=12')
+        axios.get('/scales?tones=12')
             .then(res => {
                 const scales = res.data;
                 this.setState({scales});
@@ -22,7 +22,7 @@ export default class MusicScaleList extends React.Component {
         let scales = this.state.scales;
         return (
             <div>
-                {scales.map(item => 
+                {scales.map(scale => 
                     <MusicScaleView scale={scale} startingNote={0} />)}
             </div>
         )
