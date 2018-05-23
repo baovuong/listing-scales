@@ -31,11 +31,11 @@ export default class MusicScaleView extends React.Component {
 
     render() {
         let scale = this.state.scale;
-        let startingNote = this.state.startingNote;
+        let startingNote = this.props.startingNote;
         return (
             <div>
                 <div>names: {scale.names.join(',')}</div>
-                <div>notes: {this.noteValues(scale.root, scale.intervals).map(value => MusicScaleView.mapNote(value)).join(', ')}</div>
+                <div>notes: {this.noteValues(scale.root + startingNote, scale.intervals).map(value => MusicScaleView.mapNote(value)).join(', ')}</div>
                 <div>root: {MusicScaleView.mapNote(scale.root + startingNote)}</div>
             </div>
         )
