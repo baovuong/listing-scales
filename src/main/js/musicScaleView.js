@@ -33,9 +33,18 @@ export default class MusicScaleView extends React.Component {
             'g#/4',
             'a/4',
             'a#/4',
-            'b'
+            'b/4'
         ];
         return thing[value % 12];       
+    }
+
+    static toVexNote(value, VF) {
+        let note = MusicScaleView.mapVexNote(value);
+        let rendering = new VF.StaveNote({clef: "treble", keys: [MusicScaleView.mapVexNote(value)], duration: "q" });
+        if (note.includes('#')) {
+            return rendering.addAccidental(0, new VF.Accidental('#'));
+        }
+        return rendering;
     }
 
     constructor(props) {
@@ -44,6 +53,9 @@ export default class MusicScaleView extends React.Component {
             scale: props.scale,
             startingNote: props.startingNote,
         };
+
+
+
 
     }
 
@@ -61,20 +73,60 @@ export default class MusicScaleView extends React.Component {
     }
 
     componentDidMount() {
-        var VF = Vex.Flow;
-        let div = document.getElementById('scaleNotation' + this.state.scale.id);
-        let renderer = new VF.Renderer(div, VF.Renderer.Backends.SVG);
-        //renderer.resize(500, 500);
-        let context = renderer.getContext();
-        context.setFont("Arial", 10, "").setBackgroundFillStyle("#eed");
-        let stave = new VF.Stave(10, 40, 400);
-        stave.addClef("treble").addTimeSignature("4/4");
-        stave.setContext(context).draw();
+        this.drawStaff(this.state.scale, this.props.startingNote, false);
+    }
 
-        let notes = [new VF.StaveNote({clef: "treble", keys: [MusicScaleView.mapVexNote(this.props.startingNote)], duration: "w" })];
-        let voice = new VF.Voice({num_beats: 4, beat_value: 4});
-        voice.addTickables(notes);
-        //let formatter = new VF.Formatter().joinVoices([voice]).format([voice], 400);
+    componentDidUpdate() {
+        this.drawStaff(this.state.scale, this.props.startingNote, true);
+    }
+
+    drawStaff(scale, startingNote, clearIt) {
+        let VF = Vex.Flow;
+        let div = document.getElementById('scaleNotation' + this.state.scale.id);
+
+        if (clearIt) {
+            while (div.hasChildNodes()) {
+                div.removeChild(div.lastChild);
+            }
+        }
+
+
+        let renderer = new VF.Renderer(div, VF.Renderer.Backends.SVG);
+        let context = renderer.getContext();
+
+
+        // let notes = [
+        //     new VF.StaveNote({ keys: ["c/4"], duration: "q" }),
+        //     new VF.StaveNote({ keys: ["c/4"], duration: "q" }),
+        //     new VF.StaveNote({ keys: ["d/4"], duration: "q" }),
+        //     new VF.StaveNote({ keys: ["d/4"], duration: "q" }),
+        //     new VF.StaveNote({ keys: ["d/4"], duration: "q" }),
+        //     new VF.StaveNote({ keys: ["c/4"], duration: "q" }),
+        //     new VF.StaveNote({ keys: ["c/4"], duration: "q" })
+        //   ];
+          
+        let notes = this.noteValues(scale.root + startingNote, scale.intervals).map(n => MusicScaleView.toVexNote(n, VF));
+          
+          
+          // Configure the rendering context.
+          renderer.resize(100 * notes.length, 200);
+          context.setFont("Arial", 10, "").setBackgroundFillStyle("#eed");
+          
+          // Create a stave of width 400 at position 10, 40 on the canvas.
+          let stave = new VF.Stave(10, 40, 60 * notes.length);
+          
+          // Add a clef and time signature.
+          stave.addClef("treble");
+          
+          // Connect it to the rendering context and draw!
+          stave.setContext(context).draw();
+          
+          // Create a voice in 4/4 and add above notes
+          let voice = new VF.Voice({num_beats: notes.length,  beat_value: 4});
+          voice.addTickables(notes);
+          
+          // Format and justify the notes to 400 pixels.
+          let formatter = new VF.Formatter().joinVoices([voice]).format([voice], 50 * notes.length);
 
         // Render voice
         voice.draw(context, stave);
@@ -83,7 +135,7 @@ export default class MusicScaleView extends React.Component {
     noteValues(root, intervals) {
         let intervalLength = intervals.length;
         let result = [];
-        for (var i=0; i<intervalLength; i++) {
+        for (let i=0; i<intervalLength; i++) {
             result.push(root);
             root += intervals[i];
         }
