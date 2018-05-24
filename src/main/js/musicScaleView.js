@@ -47,6 +47,8 @@ export default class MusicScaleView extends React.Component {
         return rendering;
     }
 
+
+
     constructor(props) {
         super(props);
         this.state = {
@@ -81,7 +83,6 @@ export default class MusicScaleView extends React.Component {
     }
 
     drawStaff(scale, startingNote, clearIt) {
-        let VF = Vex.Flow;
         let div = document.getElementById('scaleNotation' + this.state.scale.id);
 
         if (clearIt) {
@@ -90,45 +91,24 @@ export default class MusicScaleView extends React.Component {
             }
         }
 
-
-        let renderer = new VF.Renderer(div, VF.Renderer.Backends.SVG);
+        let renderer = new Vex.Flow.Renderer(div, VF.Renderer.Backends.SVG);
         let context = renderer.getContext();
-
-
-        // let notes = [
-        //     new VF.StaveNote({ keys: ["c/4"], duration: "q" }),
-        //     new VF.StaveNote({ keys: ["c/4"], duration: "q" }),
-        //     new VF.StaveNote({ keys: ["d/4"], duration: "q" }),
-        //     new VF.StaveNote({ keys: ["d/4"], duration: "q" }),
-        //     new VF.StaveNote({ keys: ["d/4"], duration: "q" }),
-        //     new VF.StaveNote({ keys: ["c/4"], duration: "q" }),
-        //     new VF.StaveNote({ keys: ["c/4"], duration: "q" })
-        //   ];
+  
+        let notes = this.toVexNotes(this.noteValues(scale.root + startingNote, scale.intervals));
           
-        let notes = this.noteValues(scale.root + startingNote, scale.intervals).map(n => MusicScaleView.toVexNote(n, VF));
+        renderer.resize(100 * notes.length, 200);
+        context.setFont("Arial", 10, "").setBackgroundFillStyle("#eed");
           
+        let stave = new Vex.Flow.Stave(10, 40, 60 * notes.length);
           
-          // Configure the rendering context.
-          renderer.resize(100 * notes.length, 200);
-          context.setFont("Arial", 10, "").setBackgroundFillStyle("#eed");
+        stave.addClef("treble");
           
-          // Create a stave of width 400 at position 10, 40 on the canvas.
-          let stave = new VF.Stave(10, 40, 60 * notes.length);
+        stave.setContext(context).draw();
           
-          // Add a clef and time signature.
-          stave.addClef("treble");
+        let voice = new Vex.Flow.Voice({num_beats: notes.length,  beat_value: 4});
+        voice.addTickables(notes);
           
-          // Connect it to the rendering context and draw!
-          stave.setContext(context).draw();
-          
-          // Create a voice in 4/4 and add above notes
-          let voice = new VF.Voice({num_beats: notes.length,  beat_value: 4});
-          voice.addTickables(notes);
-          
-          // Format and justify the notes to 400 pixels.
-          let formatter = new VF.Formatter().joinVoices([voice]).format([voice], 50 * notes.length);
-
-        // Render voice
+        let formatter = new Vex.Flow.Formatter().joinVoices([voice]).format([voice], 50 * notes.length);
         voice.draw(context, stave);
     }
 
@@ -141,5 +121,18 @@ export default class MusicScaleView extends React.Component {
         }
 
         return result;
+    }
+
+    toVexNotes(noteValues) {
+        const keys = ['c','c#','d','d#','e','f','f#','g','g#','a','a#','b'];
+        let octave = 4;
+        return noteValues.map(value => {
+            let note = keys[value % 12] + '/' + (value / 12 + octave);
+            let rendering = new Vex.Flow.StaveNote({clef: "treble", keys: [note], duration: "q" });
+            if (note.includes('#')) {
+                return rendering.addAccidental(0, new Vex.Flow.Accidental('#'));
+            }
+            return rendering;
+        });
     }
 }
