@@ -47,7 +47,7 @@ export default class MusicScaleList extends React.Component {
                 </select>
                 <div id="musicScaleList">
                     {scales.map(scale => 
-                        <MusicScaleView scale={scale} startingNote={parseInt(startingNote)} />)}
+                        <MusicScaleView key={scale.id} scale={scale} startingNote={parseInt(startingNote)} />)}
                 </div>
             </div>
         )

@@ -20,24 +20,6 @@ export default class MusicScaleView extends React.Component {
         return thing[value % 12];
     }
 
-    static mapVexNote(value) {
-        const thing = [
-            'c/4',
-            'c#/4',
-            'd/4',
-            'd#/4',
-            'e/4',
-            'f/4',
-            'f#/4',
-            'g/4',
-            'g#/4',
-            'a/4',
-            'a#/4',
-            'b/4'
-        ];
-        return thing[value % 12];       
-    }
-
     static toVexNote(value, VF) {
         let note = MusicScaleView.mapVexNote(value);
         let rendering = new VF.StaveNote({clef: "treble", keys: [MusicScaleView.mapVexNote(value)], duration: "q" });
@@ -47,8 +29,6 @@ export default class MusicScaleView extends React.Component {
         return rendering;
     }
 
-
-
     constructor(props) {
         super(props);
         this.state = {
@@ -56,8 +36,9 @@ export default class MusicScaleView extends React.Component {
             startingNote: props.startingNote,
         };
 
-
-
+        this.renderer = null;
+        this.stave = null;
+        this.noteRenderingGroup = null;
 
     }
 
@@ -66,50 +47,38 @@ export default class MusicScaleView extends React.Component {
         let startingNote = this.props.startingNote;
         return (
             <div>
-                <div>names: {scale.names.join(',')}</div>
-                <div>notes: {this.noteValues(scale.root + startingNote, scale.intervals).map(value => MusicScaleView.mapNote(value)).join(', ')}</div>
+                <div>{scale.names.join(', ')}</div>
                 <div id={'scaleNotation' + scale.id}></div>
-                <div>root: {MusicScaleView.mapNote(scale.root + startingNote)}</div>
             </div>
         )
     }
 
     componentDidMount() {
-        this.drawStaff(this.state.scale, this.props.startingNote, false);
+        let numNotes = this.state.scale.intervals.length;
+        let div = document.getElementById('scaleNotation' + this.state.scale.id);
+        this.renderer = new Vex.Flow.Renderer(div, Vex.Flow.Renderer.Backends.SVG);
+        this.renderer.resize(100 * numNotes, 200);
+        this.stave = new Vex.Flow.Stave(10, 40, 60 * numNotes);
+        this.stave.addClef("treble");
+        this.stave.setContext(this.renderer.getContext()).draw();
+        this.drawStaff(this.state.scale, this.props.startingNote);
     }
 
     componentDidUpdate() {
-        this.drawStaff(this.state.scale, this.props.startingNote, true);
+        this.renderer.getContext().svg.removeChild(this.noteRenderingGroup);
+        this.drawStaff(this.state.scale, this.props.startingNote);
     }
 
-    drawStaff(scale, startingNote, clearIt) {
-        let div = document.getElementById('scaleNotation' + this.state.scale.id);
-
-        if (clearIt) {
-            while (div.hasChildNodes()) {
-                div.removeChild(div.lastChild);
-            }
-        }
-
-        let renderer = new Vex.Flow.Renderer(div, VF.Renderer.Backends.SVG);
-        let context = renderer.getContext();
-  
+    drawStaff(scale, startingNote) {
+        let context = this.renderer.getContext();
         let notes = this.toVexNotes(this.noteValues(scale.root + startingNote, scale.intervals));
-          
-        renderer.resize(100 * notes.length, 200);
         context.setFont("Arial", 10, "").setBackgroundFillStyle("#eed");
-          
-        let stave = new Vex.Flow.Stave(10, 40, 60 * notes.length);
-          
-        stave.addClef("treble");
-          
-        stave.setContext(context).draw();
-          
         let voice = new Vex.Flow.Voice({num_beats: notes.length,  beat_value: 4});
         voice.addTickables(notes);
-          
         let formatter = new Vex.Flow.Formatter().joinVoices([voice]).format([voice], 50 * notes.length);
-        voice.draw(context, stave);
+        this.noteRenderingGroup = context.openGroup();
+        voice.draw(context, this.stave);
+        context.closeGroup();
     }
 
     noteValues(root, intervals) {
