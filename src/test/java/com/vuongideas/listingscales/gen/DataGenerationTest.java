@@ -1,5 +1,7 @@
 package com.vuongideas.listingscales.gen;
 
+import static org.junit.Assert.assertTrue;
+
 import java.util.Collection;
 
 import com.vuongideas.listingscales.model.MusicScale;
@@ -23,9 +25,12 @@ public class DataGenerationTest {
     @Test
     public void populateDatabase() {
         Collection<MusicScale> scales = ScaleExtractor.extractScales();
+        long failures = 0;
+        repository.deleteAll();
         for (MusicScale scale : scales) {
             System.out.println("adding: " + scale);
-            repository.save(scale);
+            failures += repository.save(scale) == null ?  1 : 0;
         }
+        assertTrue(failures == 0);
     }
 }
