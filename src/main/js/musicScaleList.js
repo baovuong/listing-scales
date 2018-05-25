@@ -12,7 +12,7 @@ export default class MusicScaleList extends React.Component {
     }
 
     componentDidMount() {
-        axios.get('/scales?tones=12')
+        axios.get('/api/scales?tones=12')
             .then(res => {
                 const scales = res.data;
                 this.setState({scales});
