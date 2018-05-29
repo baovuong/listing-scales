@@ -1,7 +1,7 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import VexFlow from 'vexflow';
-import MusicScaleList from './musicScaleList';
+import MusicScaleList from './components/musicScaleList';
 
 export class App extends React.Component {
 
