@@ -13,6 +13,7 @@ import org.springframework.data.jpa.domain.Specification;
 public class MusicScaleSpecifications {
     public static Specification<MusicScale> hasTones(int tones) {
         return new Specification<MusicScale>() {
+			private static final long serialVersionUID = 1L;
 
 			@Override
 			public Predicate toPredicate(Root<MusicScale> root, CriteriaQuery<?> query,

@@ -1,7 +1,7 @@
 var path = require('path');
 
 module.exports = {
-    entry: ['./src/main/js/app.js', './src/main/js/musicScaleView.js', './src/main/js/musicScaleList.js'],
+    entry: ['./src/main/js/app.js'],
     devtool: 'sourcemaps',
     cache: true,
     debug: true,

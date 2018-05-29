@@ -1,6 +1,7 @@
 import React from 'react';
 import axios from 'axios';
 import MusicScaleView from './musicScaleView';
+import MusicScaleListEntry from './musicScaleListEntry';
 
 export default class MusicScaleList extends React.Component {
     constructor(props) {
@@ -22,6 +23,11 @@ export default class MusicScaleList extends React.Component {
     handleNoteChange(e) {
         this.setState({startingNote:e.target.value});
     }
+
+    viewScale() {
+        
+    }
+
 
     render() {
         let scales = this.state.scales;
@@ -47,7 +53,9 @@ export default class MusicScaleList extends React.Component {
                 </select>
                 <div id="musicScaleList">
                     {scales.map(scale => 
-                        <MusicScaleView key={scale.id} scale={scale} startingNote={parseInt(startingNote)} />)}
+                        <MusicScaleListEntry key={scale.id} scale={scale} />)}
+                    {/* {scales.map(scale => 
+                        <MusicScaleView key={scale.id} scale={scale} startingNote={parseInt(startingNote)} />)} */}
                 </div>
             </div>
         )

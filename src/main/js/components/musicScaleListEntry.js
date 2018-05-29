@@ -8,6 +8,16 @@ export default class MusicscaleListEntry extends React.Component {
         super(props);
         this.state = {
             isSelected: false,
+            scale: props.scale,
         };
+    }
+
+    render() {
+        let scale = this.state.scale;
+        return (
+            <h2>
+                {scale.names.join(', ')}
+            </h2>
+        )
     }
 }
