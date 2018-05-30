@@ -8,8 +8,11 @@ export default class MusicScaleList extends React.Component {
         super(props);
         this.state = {
             scales: [],
-            startingNote: '0'
+            startingNote: '0',
+            selectedScale: 0,
         };
+
+        this.viewScaleEvent = this.viewScale.bind(this);
     }
 
     componentDidMount() {
@@ -24,16 +27,22 @@ export default class MusicScaleList extends React.Component {
         this.setState({startingNote:e.target.value});
     }
 
-    viewScale() {
-        
+    viewScale(id) {
+        this.setState({selectedScale: id});
     }
 
 
     render() {
         let scales = this.state.scales;
         let startingNote = this.state.startingNote;
+        let selectedScale = this.state.selectedScale;
         return (
             <div>
+                {selectedScale != 0 &&
+                    <MusicScaleView 
+                        scale={scales.filter(scale => scale.id == selectedScale)[0]} 
+                        startingNote={parseInt(startingNote)} />
+                }
                 <select 
                     value={startingNote}
                     onChange={this.handleNoteChange.bind(this)}>
@@ -53,9 +62,11 @@ export default class MusicScaleList extends React.Component {
                 </select>
                 <div id="musicScaleList">
                     {scales.map(scale => 
-                        <MusicScaleListEntry key={scale.id} scale={scale} />)}
-                    {/* {scales.map(scale => 
-                        <MusicScaleView key={scale.id} scale={scale} startingNote={parseInt(startingNote)} />)} */}
+                        <MusicScaleListEntry 
+                            key={scale.id} 
+                            scale={scale} 
+                            isSelected={selectedScale == scale.id} 
+                            view={this.viewScaleEvent} />)}
                 </div>
             </div>
         )

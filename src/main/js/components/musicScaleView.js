@@ -31,10 +31,6 @@ export default class MusicScaleView extends React.Component {
 
     constructor(props) {
         super(props);
-        this.state = {
-            scale: props.scale,
-            startingNote: props.startingNote,
-        };
 
         this.renderer = null;
         this.stave = null;
@@ -43,7 +39,7 @@ export default class MusicScaleView extends React.Component {
     }
 
     render() {
-        let scale = this.state.scale;
+        let scale = this.props.scale;
         let startingNote = this.props.startingNote;
         return (
             <div>
@@ -54,30 +50,36 @@ export default class MusicScaleView extends React.Component {
     }
 
     componentDidMount() {
-        let numNotes = this.state.scale.intervals.length;
-        let div = document.getElementById('scaleNotation' + this.state.scale.id);
+        let div = document.getElementById('scaleNotation' + this.props.scale.id);
         this.renderer = new Vex.Flow.Renderer(div, Vex.Flow.Renderer.Backends.SVG);
-        this.renderer.resize(100 * numNotes, 200);
-        this.stave = new Vex.Flow.Stave(10, 40, 60 * numNotes);
-        this.stave.addClef("treble");
-        this.stave.setContext(this.renderer.getContext()).draw();
-        this.drawStaff(this.state.scale, this.props.startingNote);
+        this.drawStaff(this.props.scale, this.props.startingNote);
     }
 
     componentDidUpdate() {
         this.renderer.getContext().svg.removeChild(this.noteRenderingGroup);
-        this.drawStaff(this.state.scale, this.props.startingNote);
+        this.drawStaff(this.props.scale, this.props.startingNote);
     }
 
     drawStaff(scale, startingNote) {
+        let numNotes = this.props.scale.intervals.length;
+        this.renderer.resize(100 * numNotes, 200);
+
         let context = this.renderer.getContext();
+
+        this.noteRenderingGroup = context.openGroup();
+
+        let stave = new Vex.Flow.Stave(10, 40, 60 * numNotes);
+        stave.addClef("treble");
+        stave.setContext(context).draw();
+
         let notes = this.toVexNotes(this.noteValues(scale.root + startingNote, scale.intervals));
+        console.log(notes);
         context.setFont("Arial", 10, "").setBackgroundFillStyle("#eed");
         let voice = new Vex.Flow.Voice({num_beats: notes.length,  beat_value: 4});
         voice.addTickables(notes);
         let formatter = new Vex.Flow.Formatter().joinVoices([voice]).format([voice], 50 * notes.length);
-        this.noteRenderingGroup = context.openGroup();
-        voice.draw(context, this.stave);
+        voice.draw(context, stave);
+
         context.closeGroup();
     }
 
