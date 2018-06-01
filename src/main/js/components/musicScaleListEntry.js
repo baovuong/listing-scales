@@ -1,5 +1,6 @@
 import React from 'react';
 import axios from 'axios';
+import Foundation from 'react-foundation';
 import MusicScaleView from './musicScaleView';
 
 
@@ -20,10 +21,7 @@ export default class MusicscaleListEntry extends React.Component {
         let scale = this.state.scale;
         let isSelected = this.props.isSelected;
         return (
-            <h2 onClick={this.onClickEvent}>
-                {isSelected ? 'SELECTED WOW ' : ''}
-                {scale.names.join(', ')}
-            </h2>
+            <MenuItem>{scale.names.join(', ')}</MenuItem>
         )
     }
 }

@@ -1,5 +1,6 @@
 import React from 'react';
 import axios from 'axios';
+import Foundation from 'react-foundation';
 import MusicScaleView from './musicScaleView';
 import MusicScaleListEntry from './musicScaleListEntry';
 
@@ -60,6 +61,8 @@ export default class MusicScaleList extends React.Component {
                     <option value="10">A&#9839;/B&#9837;</option>
                     <option value="11">B</option>
                 </select>
+
+
                 <div id="musicScaleList">
                     {scales.map(scale => 
                         <MusicScaleListEntry 
@@ -68,6 +71,15 @@ export default class MusicScaleList extends React.Component {
                             isSelected={selectedScale == scale.id} 
                             view={this.viewScaleEvent} />)}
                 </div>
+
+                <Menu isVertical>
+                    {scales.map(scale => 
+                        <MusicScaleListEntry 
+                            key={scale.id} 
+                            scale={scale} 
+                            isSelected={selectedScale == scale.id} 
+                            view={this.viewScaleEvent} />)}
+                </Menu>
             </div>
         )
     }
