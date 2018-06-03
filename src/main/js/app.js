@@ -23,5 +23,5 @@ export class App extends React.Component {
 
 ReactDOM.render(
     <App />,
-    document.getElementById('react')
+    document.getElementById('main')
 );
