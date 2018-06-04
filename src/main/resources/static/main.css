@@ -1,11 +1,12 @@
 #results {
     overflow-y: auto;
     height:80vh;
+    -webkit-overflow-scrolling: touch;
 }
 
 #musicScaleView {
     overflow-x: auto;
-    width: 175vh;
+    width: 75vh;
 }
 
 .musicScaleListEntry {
@@ -29,3 +30,24 @@
     white-space: nowrap;
 }
 
+.switch-inactive {
+    right: 10%;
+}
+
+.switch.large .switch-paddle {
+    width: 10rem;
+    height: 2.5rem;
+    font-size: 1rem;
+}
+
+.switch.large input:checked ~ .switch-paddle::after {
+    left: 4.5rem;
+    width: 5rem;
+}
+
+.switch.large .switch-paddle::after {
+    top: .25rem;
+    left: .25rem;
+    width: 5rem;
+    height: 2rem;
+}

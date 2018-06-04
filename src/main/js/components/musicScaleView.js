@@ -6,12 +6,15 @@ export default class MusicScaleView extends React.Component {
         super(props);
 
         this.state = {
-            startingNote: 0
+            startingNote: 0,
+            useFlats: false
         }
 
         this.renderer = null;
         this.stave = null;
         this.noteRenderingGroup = null;
+
+        this.onPreferredAccdientalClick = this.handlePreferredAccidentalClick.bind(this);
 
     }
 
@@ -38,6 +41,19 @@ export default class MusicScaleView extends React.Component {
                         <option value="10">A&#9839;/B&#9837;</option>
                         <option value="11">B</option>
                     </select>
+                    <div className="switch large">
+                    <input 
+                        className="switch-input" 
+                        id="preferred-accidental" 
+                        type="checkbox" 
+                        name="preferredAccidental" 
+                        onClick={this.onPreferredAccdientalClick} />
+                    <label className="switch-paddle" htmlFor="preferred-accidental">
+                        <span className="show-for-sr">Preferred Accidental</span>
+                        <span className="switch-active" aria-hidden="true">Flats</span>
+                        <span className="switch-inactive" aria-hidden="true">Sharps</span>
+                    </label>
+                    </div>
                     <div id={'scaleNotation'}></div>
                     <ul>
                         {scale.names.map((name, index) => 
@@ -49,6 +65,10 @@ export default class MusicScaleView extends React.Component {
         return (
             <div></div>
         )
+    }
+
+    handlePreferredAccidentalClick(e) {
+        this.setState({useFlats: e.target.checked});
     }
 
     changeStartingNote(e) {
@@ -83,7 +103,6 @@ export default class MusicScaleView extends React.Component {
         stave.setContext(context).draw();
 
         let notes = this.toVexNotes(this.noteValues(scale.root + startingNote, scale.intervals));
-        console.log(notes);
         context.setFont("Arial", 10, "").setBackgroundFillStyle("#eed");
         let voice = new Vex.Flow.Voice({num_beats: notes.length,  beat_value: 4});
         voice.addTickables(notes);
@@ -105,13 +124,22 @@ export default class MusicScaleView extends React.Component {
     }
 
     toVexNotes(noteValues) {
-        const keys = ['c','c#','d','d#','e','f','f#','g','g#','a','a#','b'];
+        const keys = ['c','c#db','d','d#eb','e','f','f#gb','g','g#ab','a','a#bb','b'];
         let octave = 4;
+        let useFlats = this.state.useFlats;
+
         return noteValues.map(value => {
-            let note = keys[value % 12] + '/' + (value / 12 + octave);
+            let note = keys[value % 12];
+            let hasAccidental = note.includes('#');
+            
+            if (hasAccidental)
+                note = useFlats ? note.substring(2) : note.substring(0, 2);
+
+            note += '/' + (value / 12 + octave);
+            
             let rendering = new Vex.Flow.StaveNote({clef: "treble", keys: [note], duration: "q" });
-            if (note.includes('#')) {
-                return rendering.addAccidental(0, new Vex.Flow.Accidental('#'));
+            if (hasAccidental) {
+                return rendering.addAccidental(0, new Vex.Flow.Accidental(useFlats ? 'b' : '#'));
             }
             return rendering;
         });

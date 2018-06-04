@@ -55,7 +55,7 @@ export default class MusicScaleList extends React.Component {
         let selectedScale = this.state.selectedScale;
         return (
             <div id="musicScaleList">
-                <input type="text" onInput={this.onQueryInput} />
+                <input type="text" placeholder="search..." onInput={this.onQueryInput} />
                 <div id="results">
                     {this.searchScales(query, scales).map(scale => 
                         <MusicScaleListEntry 
