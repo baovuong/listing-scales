@@ -9,19 +9,18 @@ export default class MusicscaleListEntry extends React.Component {
         this.state = {
             scale: props.scale,
         };
-
-        this.onClickEvent = this.onClickThing.bind(this);
     }
 
-    onClickThing() {
+    handleOnClick() {
         this.props.view(this.state.scale.id);
     };
+    
     render() {
         let scale = this.state.scale;
         let isSelected = this.props.isSelected;
         return (
-            <div onClick={this.onClickEvent}>
-                <h2>{scale.names.join(', ')}</h2>
+            <div onClick={this.handleOnClick.bind(this)}>
+                <h2>{isSelected ? 'SELECTED: ' : ''} {scale.names.join(', ')}</h2>
             </div>
         )
     }

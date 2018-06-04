@@ -2,35 +2,12 @@ import React from 'react';
 import Vex from 'vexflow';
 
 export default class MusicScaleView extends React.Component {
-    static mapNote(value) {
-        const thing = [
-            'C',
-            'C' + String.fromCharCode(9839) + '/D' + String.fromCharCode(9837),
-            'D',
-            'D' + String.fromCharCode(9839) + '/E' + String.fromCharCode(9837),
-            'E',
-            'F',
-            'F' + String.fromCharCode(9839) + '/G' + String.fromCharCode(9837),
-            'G',
-            'G' + String.fromCharCode(9839) + '/A' + String.fromCharCode(9837),
-            'A',
-            'A' + String.fromCharCode(9839) + '/B' + String.fromCharCode(9837),
-            'B'
-        ];
-        return thing[value % 12];
-    }
-
-    static toVexNote(value, VF) {
-        let note = MusicScaleView.mapVexNote(value);
-        let rendering = new VF.StaveNote({clef: "treble", keys: [MusicScaleView.mapVexNote(value)], duration: "q" });
-        if (note.includes('#')) {
-            return rendering.addAccidental(0, new VF.Accidental('#'));
-        }
-        return rendering;
-    }
-
     constructor(props) {
         super(props);
+
+        this.state = {
+            startingNote: 0
+        }
 
         this.renderer = null;
         this.stave = null;
@@ -40,24 +17,54 @@ export default class MusicScaleView extends React.Component {
 
     render() {
         let scale = this.props.scale;
-        let startingNote = this.props.startingNote;
+        let startingNote = this.state.startingNote;
+        if (scale != null) {
+            return (
+                <div>
+                    <div>{scale.names.join(', ')}</div>
+                    <div id={'scaleNotation'}></div>
+                    <select 
+                        value={startingNote}
+                        onChange={this.changeStartingNote.bind(this)}>
+    
+                        <option value="0">C</option>
+                        <option value="1">C&#9839;/D&#9837;</option>
+                        <option value="2">D</option>
+                        <option value="3">D&#9839;/E&#9837;</option>
+                        <option value="4">E</option>
+                        <option value="5">F</option>
+                        <option value="6">F&#9839;/G&#9837;</option>
+                        <option value="7">G</option>
+                        <option value="8">G&#9839;/A&#9837;</option>
+                        <option value="9">A</option>
+                        <option value="10">A&#9839;/B&#9837;</option>
+                        <option value="11">B</option>
+                    </select>
+                </div>
+            )
+        }
         return (
-            <div>
-                <div>{scale.names.join(', ')}</div>
-                <div id={'scaleNotation' + scale.id}></div>
-            </div>
+            <div></div>
         )
     }
 
+    changeStartingNote(e) {
+        this.setState({startingNote: parseInt(e.target.value)});
+    }
+
     componentDidMount() {
-        let div = document.getElementById('scaleNotation' + this.props.scale.id);
-        this.renderer = new Vex.Flow.Renderer(div, Vex.Flow.Renderer.Backends.SVG);
-        this.drawStaff(this.props.scale, this.props.startingNote);
+        if (this.props.scale != null) {
+            let div = document.getElementById('scaleNotation');
+            this.renderer = new Vex.Flow.Renderer(div, Vex.Flow.Renderer.Backends.SVG);
+            this.drawStaff(this.props.scale, this.state.startingNote);
+        }
     }
 
     componentDidUpdate() {
-        this.renderer.getContext().svg.removeChild(this.noteRenderingGroup);
-        this.drawStaff(this.props.scale, this.props.startingNote);
+        if (this.props.scale != null) {
+            this.renderer.getContext().svg.removeChild(this.noteRenderingGroup);
+            this.drawStaff(this.props.scale, this.state.startingNote);
+        }
     }
 
     drawStaff(scale, startingNote) {
@@ -106,4 +113,23 @@ export default class MusicScaleView extends React.Component {
             return rendering;
         });
     }
+
+    mapNote(value) {
+        const thing = [
+            'C',
+            'C' + String.fromCharCode(9839) + '/D' + String.fromCharCode(9837),
+            'D',
+            'D' + String.fromCharCode(9839) + '/E' + String.fromCharCode(9837),
+            'E',
+            'F',
+            'F' + String.fromCharCode(9839) + '/G' + String.fromCharCode(9837),
+            'G',
+            'G' + String.fromCharCode(9839) + '/A' + String.fromCharCode(9837),
+            'A',
+            'A' + String.fromCharCode(9839) + '/B' + String.fromCharCode(9837),
+            'B'
+        ];
+        return thing[value % 12];
+    }
+
 }
