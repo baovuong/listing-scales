@@ -14,13 +14,13 @@ export default class MusicscaleListEntry extends React.Component {
     handleOnClick() {
         this.props.view(this.state.scale.id);
     };
-    
+
     render() {
         let scale = this.state.scale;
         let isSelected = this.props.isSelected;
         return (
             <div onClick={this.handleOnClick.bind(this)}>
-                <h2>{isSelected ? 'SELECTED: ' : ''} {scale.names.join(', ')}</h2>
+                {isSelected ? 'SELECTED: ' : ''} {scale.names.join(', ')}
             </div>
         )
     }

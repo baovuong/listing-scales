@@ -36,7 +36,7 @@ export default class MusicScaleList extends React.Component {
         //let startingNote = this.state.startingNote;
         let selectedScale = this.state.selectedScale;
         return (
-            <div>
+            <div id="musicScaleList">
                 {/* {selectedScale != 0 &&
                     <MusicScaleView 
                         scale={scales.filter(scale => scale.id == selectedScale)[0]} 
