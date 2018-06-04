@@ -9,9 +9,11 @@ export default class MusicscaleListEntry extends React.Component {
         this.state = {
             scale: props.scale,
         };
+
+        this.onClick = this.handleClick.bind(this);
     }
 
-    handleOnClick() {
+    handleClick() {
         this.props.view(this.state.scale.id);
     };
 
@@ -19,8 +21,8 @@ export default class MusicscaleListEntry extends React.Component {
         let scale = this.state.scale;
         let isSelected = this.props.isSelected;
         return (
-            <div onClick={this.handleOnClick.bind(this)}>
-                {isSelected ? 'SELECTED: ' : ''} {scale.names.join(', ')}
+            <div onClick={this.onClick} className={'musicScaleListEntry truncate ' + (isSelected ? 'selected' : '')}>
+                {scale.names.join(', ')}
             </div>
         )
     }

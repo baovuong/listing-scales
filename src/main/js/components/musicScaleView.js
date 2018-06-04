@@ -20,9 +20,7 @@ export default class MusicScaleView extends React.Component {
         let startingNote = this.state.startingNote;
         if (scale != null) {
             return (
-                <div>
-                    <div>{scale.names.join(', ')}</div>
-                    <div id={'scaleNotation'}></div>
+                <div id="musicScaleView">
                     <select 
                         value={startingNote}
                         onChange={this.changeStartingNote.bind(this)}>
@@ -40,6 +38,11 @@ export default class MusicScaleView extends React.Component {
                         <option value="10">A&#9839;/B&#9837;</option>
                         <option value="11">B</option>
                     </select>
+                    <div id={'scaleNotation'}></div>
+                    <ul>
+                        {scale.names.map((name, index) => 
+                            <li key={index}>{name}</li>)}
+                    </ul>
                 </div>
             )
         }
@@ -69,13 +72,13 @@ export default class MusicScaleView extends React.Component {
 
     drawStaff(scale, startingNote) {
         let numNotes = this.props.scale.intervals.length;
-        this.renderer.resize(100 * numNotes, 200);
+        this.renderer.resize(100 * numNotes, 150);
 
         let context = this.renderer.getContext();
 
         this.noteRenderingGroup = context.openGroup();
 
-        let stave = new Vex.Flow.Stave(10, 40, 60 * numNotes);
+        let stave = new Vex.Flow.Stave(5, 0, 60 * numNotes);
         stave.addClef("treble");
         stave.setContext(context).draw();
 

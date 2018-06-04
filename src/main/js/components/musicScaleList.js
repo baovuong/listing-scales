@@ -9,9 +9,11 @@ export default class MusicScaleList extends React.Component {
             scales: [],
             startingNote: '0',
             selectedScale: 0,
+            query: ''
         };
 
-        this.viewScaleEvent = this.viewScale.bind(this);
+        this.onView = this.viewScale.bind(this);
+        this.onQueryInput = this.handleQueryInput.bind(this);
     }
 
     componentDidMount() {
@@ -30,25 +32,37 @@ export default class MusicScaleList extends React.Component {
         this.props.viewScale(newScale);
     }
 
+    searchScales(query, scales) {
+        if (query == '') {
+            return scales;
+        }
+
+        return scales.filter(scale => 
+            scale.names.filter(name => 
+                name.toLowerCase()
+                    .includes(query.toLowerCase()))
+                    .length > 0);
+    }
+
+    handleQueryInput(e) {
+        this.setState({query: e.target.value});
+    }
+
 
     render() {
         let scales = this.state.scales;
-        //let startingNote = this.state.startingNote;
+        let query = this.state.query;
         let selectedScale = this.state.selectedScale;
         return (
             <div id="musicScaleList">
-                {/* {selectedScale != 0 &&
-                    <MusicScaleView 
-                        scale={scales.filter(scale => scale.id == selectedScale)[0]} 
-                        startingNote={parseInt(startingNote)} />
-                } */}
-                <div>
-                    {scales.map(scale => 
+                <input type="text" onInput={this.onQueryInput} />
+                <div id="results">
+                    {this.searchScales(query, scales).map(scale => 
                         <MusicScaleListEntry 
                             key={scale.id} 
                             scale={scale} 
                             isSelected={selectedScale == scale.id} 
-                            view={this.viewScaleEvent} />)}
+                            view={this.onView} />)}
                 </div>
             </div>
         )

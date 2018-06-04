@@ -11,11 +11,12 @@ export class App extends React.Component {
         this.state = {
             selectedScale: null
         };
+
+        this.onViewScale = this.viewScale.bind(this);
     }
 
     viewScale(scale) {
         this.setState({selectedScale: scale});
-        console.log(this.state.selectedScale);
     }
 
     render() {
@@ -24,7 +25,7 @@ export class App extends React.Component {
             <div>
                 <div className="grid-x">
                     <div className="cell small-2 medium-4 large-4">
-                        <MusicScaleList viewScale={this.viewScale.bind(this)} />
+                        <MusicScaleList viewScale={this.onViewScale} />
                     </div>
                     <div className="cell small-10 medium-8 large-8">
                         {selectedScale != null &&
