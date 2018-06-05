@@ -41,7 +41,7 @@
 }
 
 .switch.large input:checked ~ .switch-paddle::after {
-    left: 4.5rem;
+    left: 4.75rem;
     width: 5rem;
 }
 

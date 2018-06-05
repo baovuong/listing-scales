@@ -21,7 +21,9 @@ export default class MusicscaleListEntry extends React.Component {
         let scale = this.state.scale;
         let isSelected = this.props.isSelected;
         return (
-            <div onClick={this.onClick} className={'musicScaleListEntry truncate ' + (isSelected ? 'selected' : '')}>
+            <div 
+                onClick={this.onClick} 
+                className={'musicScaleListEntry truncate ' + (isSelected ? 'selected' : '')}>
                 {scale.names.join(', ')}
             </div>
         )

@@ -106,8 +106,16 @@ export default class MusicScaleView extends React.Component {
         context.setFont("Arial", 10, "").setBackgroundFillStyle("#eed");
         let voice = new Vex.Flow.Voice({num_beats: notes.length,  beat_value: 4});
         voice.addTickables(notes);
-        let formatter = new Vex.Flow.Formatter().joinVoices([voice]).format([voice], 50 * notes.length);
+
+        let noteLetters = this.toVexLetterNotes(this.noteValues(scale.root + startingNote, scale.intervals), stave);
+        let voice2 = new Vex.Flow.Voice({num_beats: notes.length, beat_value: 4});
+        voice2.addTickables(noteLetters);
+
+        let formatter = new Vex.Flow.Formatter().joinVoices([voice, voice2]).format([voice, voice2], 50 * notes.length);
+
         voice.draw(context, stave);
+        noteLetters.forEach(letter => letter.setContext(context).draw());
+
 
         context.closeGroup();
     }
@@ -141,6 +149,32 @@ export default class MusicScaleView extends React.Component {
             if (hasAccidental) {
                 return rendering.addAccidental(0, new Vex.Flow.Accidental(useFlats ? 'b' : '#'));
             }
+            return rendering;
+        });
+    }
+
+    toVexLetterNotes(noteValues, stave) {
+        let useFlats = this.state.useFlats;
+
+        return noteValues.map(value => {
+            let note = this.mapNote(value);
+
+            if (note.includes('/')) 
+                note = useFlats ? note.substring(3) : note.substring(0, 2);
+            
+            let rendering = new Vex.Flow.TextNote({
+                text: note,
+                font: {
+                    family: 'Arial',
+                    size: 12,
+                    weight: ''
+                },
+                duration: 'q'
+            })
+            .setLine(11)
+            .setStave(stave)
+            .setJustification(Vex.Flow.TextNote.Justification.LEFT);
+
             return rendering;
         });
     }
