@@ -25,7 +25,7 @@ export class App extends React.Component {
             <div>
                 <div className="grid-x">
                     <div className="cell small-2 medium-4 large-4">
-                        <MusicScaleList viewScale={this.onViewScale} />
+                        <MusicScaleList viewScale={this.onViewScale} isMobile={this.isMobile()} />
                     </div>
                     <div className="cell small-10 medium-8 large-8">
                         {selectedScale != null &&
@@ -35,6 +35,22 @@ export class App extends React.Component {
             </div>
         )
     }
+
+    isMobile() { 
+        if( navigator.userAgent.match(/Android/i)
+        || navigator.userAgent.match(/webOS/i)
+        || navigator.userAgent.match(/iPhone/i)
+        || navigator.userAgent.match(/iPad/i)
+        || navigator.userAgent.match(/iPod/i)
+        || navigator.userAgent.match(/BlackBerry/i)
+        || navigator.userAgent.match(/Windows Phone/i)
+        ){
+           return true;
+         }
+        else {
+           return false;
+         }
+       }
 }
 
 

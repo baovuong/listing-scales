@@ -9,17 +9,27 @@ export default class MusicScaleList extends React.Component {
             scales: [],
             startingNote: '0',
             selectedScale: 0,
-            query: ''
+            query: '',
         };
+
+        this.queryOnHold = '';
+        this.timer = null;
 
         this.onView = this.viewScale.bind(this);
         this.onQueryInput = this.handleQueryInput.bind(this);
+        this.onTimeout = this.handleTimeout.bind(this);
     }
 
     componentDidMount() {
         axios.get('/api/scales?tones=12')
             .then(res => {
                 const scales = res.data;
+                scales.forEach(s => {
+                    s.searchableNames = s.names
+                        .map(n => n.toLowerCase())
+                        .reduce((a, b) => a + b);
+                });
+
                 this.setState({scales});
             });
     }
@@ -33,37 +43,47 @@ export default class MusicScaleList extends React.Component {
     }
 
     searchScales(query, scales) {
+        
         if (query == '') {
             return scales;
         }
+        query = query.toLowerCase();
+        let results = scales
+            .filter(s => s.searchableNames.indexOf(query) >= 0);
+        return results;
+            
 
-        return scales.filter(scale => 
-            scale.names.filter(name => 
-                name.toLowerCase()
-                    .includes(query.toLowerCase()))
-                    .length > 0);
+
     }
 
     handleQueryInput(e) {
-        this.setState({query: e.target.value});
+        this.queryOnHold = e.target.value;
+
+        this.timer = setTimeout(this.onTimeout, this.props.isMobile ? 800 : 300);
     }
 
+    handleTimeout() {
+        clearTimeout(this.timer);
+        console.log('doing the thing now');
+        this.setState({query: this.queryOnHold});
+    }
 
     render() {
+        console.log('mobile: ' + this.props.isMobile);
         let scales = this.state.scales;
         let query = this.state.query;
         let selectedScale = this.state.selectedScale;
         return (
             <div id="musicScaleList">
                 <input type="text" placeholder="search..." onInput={this.onQueryInput} />
-                <div id="results">
+                <ul id="results">
                     {this.searchScales(query, scales).map(scale => 
                         <MusicScaleListEntry 
                             key={scale.id} 
                             scale={scale} 
                             isSelected={selectedScale == scale.id} 
                             view={this.onView} />)}
-                </div>
+                </ul>
             </div>
         )
     }

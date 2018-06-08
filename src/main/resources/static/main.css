@@ -1,7 +1,9 @@
-#results {
+ul#results {
     overflow-y: auto;
     height:80vh;
     -webkit-overflow-scrolling: touch;
+    list-style-type: none;
+    margin-left: 0;
 }
 
 #musicScaleView {
@@ -9,25 +11,23 @@
     width: 75vh;
 }
 
-.musicScaleListEntry {
+ul#results li {
     border-bottom: 1px solid #e9e9e9;
-    padding-top: 5px;
-    padding-bottom: 5px;
+    padding: 5px;
     user-select: none;
     -moz-user-select: none;
     -khtml-user-select: none;
     -webkit-user-select: none;
     -o-user-select: none;
+
+    text-overflow: ellipsis;
+    overflow-x: hidden;
+    white-space: nowrap;
+
 }
 
 .selected {
     background-color: #b8dfe0;
-}
-
-.truncate {
-    text-overflow: ellipsis;
-    overflow-x: hidden;
-    white-space: nowrap;
 }
 
 .switch-inactive {
