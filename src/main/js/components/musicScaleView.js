@@ -24,36 +24,39 @@ export default class MusicScaleView extends React.Component {
         if (scale != null) {
             return (
                 <div id="musicScaleView">
-                    <select 
-                        value={startingNote}
-                        onChange={this.changeStartingNote.bind(this)}>
-    
-                        <option value="0">C</option>
-                        <option value="1">C&#9839;/D&#9837;</option>
-                        <option value="2">D</option>
-                        <option value="3">D&#9839;/E&#9837;</option>
-                        <option value="4">E</option>
-                        <option value="5">F</option>
-                        <option value="6">F&#9839;/G&#9837;</option>
-                        <option value="7">G</option>
-                        <option value="8">G&#9839;/A&#9837;</option>
-                        <option value="9">A</option>
-                        <option value="10">A&#9839;/B&#9837;</option>
-                        <option value="11">B</option>
-                    </select>
-                    <div className="switch large">
-                    <input 
-                        className="switch-input" 
-                        id="preferred-accidental" 
-                        type="checkbox" 
-                        name="preferredAccidental" 
-                        onClick={this.onPreferredAccdientalClick} />
-                    <label className="switch-paddle" htmlFor="preferred-accidental">
-                        <span className="show-for-sr">Preferred Accidental</span>
-                        <span className="switch-active" aria-hidden="true">Flats</span>
-                        <span className="switch-inactive" aria-hidden="true">Sharps</span>
-                    </label>
+                    <div className="header">
+                        <select 
+                            value={startingNote}
+                            onChange={this.changeStartingNote.bind(this)}>
+        
+                            <option value="0">C</option>
+                            <option value="1">C&#9839;/D&#9837;</option>
+                            <option value="2">D</option>
+                            <option value="3">D&#9839;/E&#9837;</option>
+                            <option value="4">E</option>
+                            <option value="5">F</option>
+                            <option value="6">F&#9839;/G&#9837;</option>
+                            <option value="7">G</option>
+                            <option value="8">G&#9839;/A&#9837;</option>
+                            <option value="9">A</option>
+                            <option value="10">A&#9839;/B&#9837;</option>
+                            <option value="11">B</option>
+                        </select>
+                        <div className="switch large">
+                        <input 
+                            className="switch-input" 
+                            id="preferred-accidental" 
+                            type="checkbox" 
+                            name="preferredAccidental" 
+                            onClick={this.onPreferredAccdientalClick} />
+                        <label className="switch-paddle" htmlFor="preferred-accidental">
+                            <span className="show-for-sr">Preferred Accidental</span>
+                            <span className="switch-active" aria-hidden="true">Flats</span>
+                            <span className="switch-inactive" aria-hidden="true">Sharps</span>
+                        </label>
+                        </div>
                     </div>
+
                     <div id={'scaleNotation'}></div>
                     <ul>
                         {scale.names.map((name, index) => 
@@ -92,7 +95,7 @@ export default class MusicScaleView extends React.Component {
 
     drawStaff(scale, startingNote) {
         let numNotes = this.props.scale.intervals.length;
-        this.renderer.resize(100 * numNotes, 150);
+        this.renderer.resize(63 * numNotes, 150);
 
         let context = this.renderer.getContext();
 
