@@ -63,9 +63,9 @@ export default class MusicScaleView extends React.Component {
                         {scale.names.map((name, index) => 
                             <li key={index}>{name}</li>)}
                         </ul>
-                        <span className="mobile">
+                        <div className="mobile">
                         {scale.names.join(', ')}
-                        </span>
+                        </div>
                     </div>
                 </div>
             )
