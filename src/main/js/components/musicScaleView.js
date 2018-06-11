@@ -23,7 +23,7 @@ export default class MusicScaleView extends React.Component {
         let startingNote = this.state.startingNote;
         if (scale != null) {
             return (
-                <div id="musicScaleView">
+                <div>
                     <div className="header">
                         <select 
                             value={startingNote}
@@ -58,10 +58,15 @@ export default class MusicScaleView extends React.Component {
                     </div>
 
                     <div id={'scaleNotation'}></div>
-                    <ul>
+                    <div id="scaleNames">
+                        <ul className="desktop">
                         {scale.names.map((name, index) => 
                             <li key={index}>{name}</li>)}
-                    </ul>
+                        </ul>
+                        <span className="mobile">
+                        {scale.names.join(', ')}
+                        </span>
+                    </div>
                 </div>
             )
         }
@@ -95,7 +100,7 @@ export default class MusicScaleView extends React.Component {
 
     drawStaff(scale, startingNote) {
         let numNotes = this.props.scale.intervals.length;
-        this.renderer.resize(63 * numNotes, 150);
+        this.renderer.resize(63 * numNotes, 120);
 
         let context = this.renderer.getContext();
 

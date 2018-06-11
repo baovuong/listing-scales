@@ -22,15 +22,13 @@ export class App extends React.Component {
     render() {
         let selectedScale = this.state.selectedScale;
         return (
-            <div>
-                <div className="grid-x">
-                    <div className="cell small-2 medium-4 large-4">
-                        <MusicScaleList viewScale={this.onViewScale} isMobile={this.isMobile()} />
-                    </div>
-                    <div className="cell small-10 medium-8 large-8">
-                        {selectedScale != null &&
-                        <MusicScaleView scale={selectedScale} />}
-                    </div>
+            <div className="container">
+                <div id="musicScaleList">
+                    <MusicScaleList viewScale={this.onViewScale} isMobile={this.isMobile()} />
+                </div>
+                <div id="musicScaleView">
+                    {selectedScale != null &&
+                    <MusicScaleView scale={selectedScale} />}
                 </div>
             </div>
         )

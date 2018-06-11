@@ -69,12 +69,11 @@ export default class MusicScaleList extends React.Component {
     }
 
     render() {
-        console.log('mobile: ' + this.props.isMobile);
         let scales = this.state.scales;
         let query = this.state.query;
         let selectedScale = this.state.selectedScale;
         return (
-            <div id="musicScaleList">
+            <div>
                 <input type="text" placeholder="search..." onInput={this.onQueryInput} />
                 <ul id="results">
                     {this.searchScales(query, scales).map(scale => 
