@@ -30,10 +30,11 @@
         display: flex;
         flex-direction: row;
         box-orient: horizontal;
-        /* position: fixed;
-        bottom: 0; */
+        position: fixed;
+        bottom: 0;
         width: 100%;
         order: 2;
+        margin: 0;
     }
 
     #query {
@@ -121,6 +122,7 @@
         position: auto;
         bottom: auto;
         order: 1;
+        margin: auto;
     }
 
     #query {
