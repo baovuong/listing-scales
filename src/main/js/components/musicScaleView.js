@@ -125,9 +125,9 @@ export default class MusicScaleView extends React.Component {
 
     noteValues(root, intervals) {
         let intervalLength = intervals.length;
-        let result = [];
+        let result = new Array(intervalLength);
         for (let i=0; i<intervalLength; i++) {
-            result.push(root);
+            result[i] = root;
             root += intervals[i];
         }
 
