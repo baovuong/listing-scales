@@ -15,9 +15,9 @@ export default class MusicScaleList extends React.Component {
         this.queryOnHold = '';
         this.timer = null;
 
-        this.onView = this.viewScale.bind(this);
-        this.onQueryInput = this.handleQueryInput.bind(this);
-        this.onTimeout = this.handleTimeout.bind(this);
+        this.onViewScale = this.handleViewScale.bind(this);
+
+
     }
 
     componentDidMount() {
@@ -34,7 +34,7 @@ export default class MusicScaleList extends React.Component {
             });
     }
 
-    viewScale(id) {
+    handleViewScale(id) {
         let scales = this.state.scales;
         let newScale = scales.filter(scale => scale.id == id)[0];
 
@@ -51,37 +51,21 @@ export default class MusicScaleList extends React.Component {
         let results = scales
             .filter(s => s.searchableNames.indexOf(query) >= 0);
         return results;
-            
-
-
-    }
-
-    handleQueryInput(e) {
-        this.queryOnHold = e.target.value;
-
-        this.timer = setTimeout(this.onTimeout, this.props.isMobile ? 800 : 300);
-    }
-
-    handleTimeout() {
-        clearTimeout(this.timer);
-        console.log('doing the thing now');
-        this.setState({query: this.queryOnHold});
     }
 
     render() {
         let scales = this.state.scales;
-        let query = this.state.query;
-        let selectedScale = this.state.selectedScale;
+        let query = this.props.query;
+        let selectedScale = this.props.selectedScale;
         return (
             <div>
-                <input type="text" placeholder="search..." onInput={this.onQueryInput} />
                 <ul id="results">
                     {this.searchScales(query, scales).map(scale => 
                         <MusicScaleListEntry 
                             key={scale.id} 
                             scale={scale} 
-                            isSelected={selectedScale == scale.id} 
-                            view={this.onView} />)}
+                            isSelected={selectedScale != null && selectedScale.id == scale.id} 
+                            view={this.onViewScale} />)}
                 </ul>
             </div>
         )
