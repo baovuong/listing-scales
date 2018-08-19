@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
@@ -25,7 +26,7 @@ public class ListingScalesController {
 
     @RequestMapping(value = "/scales", method = RequestMethod.GET)
     @CrossOrigin(origins = "*")
-    public List<MusicScale> allScales(
+    public @ResponseBody List<MusicScale> allScales(
         @RequestParam(name = "q", required = false) String name,
         @RequestParam(name = "tones", required = false) Integer tones) {
 
@@ -41,7 +42,7 @@ public class ListingScalesController {
     }
 
     @RequestMapping(value = "/scales/{id}", method = RequestMethod.GET)
-    public MusicScale scaleById(@PathVariable long id) throws NotFoundException {
+    public @ResponseBody MusicScale scaleById(@PathVariable long id) throws NotFoundException {
         return repository.findById(id)
             .orElseThrow(() -> new NotFoundException(String.format("scale of id %d does not exist.", id)));
     }

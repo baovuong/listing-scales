@@ -29,7 +29,8 @@
     "foundation-sites": "^6.4.4-rc1"
   },
   "scripts": {
-    "watch": "webpack --watch -d"
+    "watch": "webpack --watch -d",
+    "build": "webpack --config webpack.config.js"
   },
   "devDependencies": {
     "babel-core": "^6.18.2",

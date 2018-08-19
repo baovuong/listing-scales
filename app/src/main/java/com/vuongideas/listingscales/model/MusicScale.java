@@ -12,9 +12,13 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 
+import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlElementWrapper;
+import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlProperty;
+import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlRootElement;
 import com.vuongideas.listingscales.util.IntegerListConverter;
 
 @Entity
+@JacksonXmlRootElement(localName="music-scale")
 public class MusicScale {
     
     @Id
@@ -23,6 +27,8 @@ public class MusicScale {
 
     @Column
     @Convert(converter = IntegerListConverter.class)
+    @JacksonXmlElementWrapper(localName = "intervals")
+    @JacksonXmlProperty(localName = "interval")
     private List<Integer> intervals;
 
     @Column
@@ -34,6 +40,8 @@ public class MusicScale {
     @ElementCollection
     @CollectionTable(name="ScaleName", joinColumns=@JoinColumn(name="musicScaleId"))
     @Column(name="name")
+    @JacksonXmlElementWrapper(localName = "names")
+    @JacksonXmlProperty(localName = "name")
     private List<String> names;
 
 

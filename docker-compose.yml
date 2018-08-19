@@ -1,0 +1,35 @@
+version: '3'
+
+services:
+    db:
+        image: mysql
+        container_name: listingscales_db
+        volumes:
+            - container-volume:/var/lib/mysql
+            - ./db/dump.sql:/docker-entrypoint-initdb.d/dump.sql
+        environment:
+            MYSQL_ROOT_PASSWORD: root
+            MYSQL_DATABASE: listing_scales
+        ports:
+            - 3310:3306
+        expose: 
+            - 3310
+        networks:
+            - listingscales-network
+    app:
+        container_name: listingscales_app
+        depends_on:
+            - db
+        build: './app'
+        ports:
+            - 8090:8090
+        links:
+            - 'db:database'
+        networks:
+            - listingscales-network
+volumes:
+    container-volume:
+
+networks:
+    listingscales-network:
+        driver: bridge 
