@@ -2,7 +2,7 @@ version: '2'
 
 services:
     db:
-        image: mysql
+        image: mariadb
         container_name: listingscales_db
         volumes:
             - container-volume:/var/lib/mysql
