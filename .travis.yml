@@ -1,2 +1,2 @@
-install:
-  - bundle install
+language: java
+jdk: oraclejdk8
